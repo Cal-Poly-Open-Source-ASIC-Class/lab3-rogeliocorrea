@@ -33,6 +33,13 @@ module tb_dualport();
 
     localparam CLK_PERIOD = 10;
 
+    `ifdef USE_POWER_PINS
+    wire VPWR;
+    wire VGND;
+    assign VPWR=1;
+    assign VGND=0;
+    `endif
+
 always 
 begin
     #(CLK_PERIOD/2) //icarus happy with this, can i go back to vivado pls
@@ -52,7 +59,8 @@ end
 
     always 
     begin
-        /* Test to show stalls
+    //Test to show stalls
+    #10;
     pA_wb_stb_i <= 1;
     pB_wb_stb_i <= 1;
     pA_wb_data_i <= 32'hAA; //random stuff
@@ -64,14 +72,14 @@ end
     pA_wb_addr_i <= 11'b10000000000;
     pB_wb_addr_i <= 11'b10000010000;
 
-    #20;
+    #30;
     pA_wb_data_i <= 0;
     pB_wb_data_i <= 0;
     pA_wb_we_i <= 0;
     pB_wb_we_i <= 0;  
     #60;
-    */
     
+    /*
     //test to show pipelined reads/writes
     pA_wb_stb_i <= 1;
     pA_wb_data_i <= 1;
@@ -102,6 +110,7 @@ end
     #10;
     pA_wb_addr_i <= 11'b00001000000; //read 5
     #20;
+    */
     $finish();
     end
 
